@@ -494,25 +494,23 @@ function runAnalysis(){
   const spinner=document.getElementById('spinner');
   const results=document.getElementById('results');
   btn.disabled=true;results.classList.remove('show');spinner.classList.add('show');
-  setTimeout(()=>{
-    spinner.classList.remove('show');
-    const trend=Math.random()>.45?'Uptrend':'Downtrend';
-    const conf=(rand(50,90)).toFixed(1)+'%';
-    const vol=(rand(0.1,0.5)).toFixed(2);
-    const risks=['Low','Medium','High'];const risk=risks[Math.floor(Math.random()*3)];
-    const anomaly=Math.random()<0.15;
-    document.getElementById('res-trend').textContent=trend;
-    document.getElementById('res-trend').style.color=trend==='Uptrend'?'var(--green)':'#f87171';
-    document.getElementById('res-conf').textContent=conf;
-    document.getElementById('res-vol').textContent=vol;
-    const riskEl=document.getElementById('res-risk');
-    riskEl.textContent=risk;
-    riskEl.style.color=risk==='Low'?'var(--green)':risk==='Medium'?'#f59e0b':'#f87171';
-    const anomEl=document.getElementById('res-anomaly');
-    anomEl.textContent=anomaly?'Yes — Detected':'No';
-    anomEl.style.color=anomaly?'#f87171':'var(--green)';
-    results.classList.add('show');btn.disabled=false;
-  },900);
+  fetch("https://uvy6bqlgljyyirohkco2qmhiuy0jgaka.lambda-url.us-east-1.on.aws/")
+  .then(res => res.json())
+  .then(data => {
+
+    document.getElementById('res-trend').textContent = data.trend;
+    document.getElementById('res-conf').textContent = (data.confidence * 100).toFixed(1) + "%";
+    document.getElementById('res-vol').textContent = data.volatility;
+
+    const riskEl = document.getElementById('res-risk');
+    riskEl.textContent = data.risk;
+
+    const anomEl = document.getElementById('res-anomaly');
+    anomEl.textContent = data.anomaly ? 'Yes — Detected' : 'No';
+
+    document.getElementById('results').classList.add('show');
+    document.getElementById('runBtn').disabled = false;
+  });
 }
 function copyCode(btn,text){
   navigator.clipboard.writeText(text).then(()=>{
