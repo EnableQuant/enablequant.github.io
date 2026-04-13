@@ -1,0 +1,526 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#080c14;--bg2:#0d1420;--bg3:#111827;
+  --blue:#3B82F6;--green:#10B981;--blue-dim:#1d3461;--green-dim:#064e3b;
+  --text:#e2e8f0;--muted:#64748b;--border:#1e2a3a;
+  --card:#0f1923;--card2:#131f2e;
+  --font:'DM Sans',sans-serif;--mono:'DM Mono',monospace;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;overflow-x:hidden;font-size:15px}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(8,12,20,0.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:60px}
+.logo{display:flex;align-items:center;gap:8px;font-size:18px;font-weight:600;cursor:pointer}
+.logo-icon{width:28px;height:28px;display:flex;align-items:center;justify-content:center}
+.logo-icon svg{width:28px;height:28px}
+.nav-links{display:flex;gap:4px}
+.nav-btn{background:none;border:none;color:var(--muted);padding:6px 14px;border-radius:8px;cursor:pointer;font-family:var(--font);font-size:14px;transition:all .2s}
+.nav-btn:hover,.nav-btn.active{color:var(--text);background:var(--bg3)}
+.nav-cta{background:var(--blue);color:#fff;border:none;padding:8px 18px;border-radius:8px;cursor:pointer;font-family:var(--font);font-size:14px;font-weight:500;transition:all .2s}
+.nav-cta:hover{background:#2563eb;transform:translateY(-1px)}
+
+/* PAGES */
+.page{display:none;animation:fadeIn .4s ease}
+.page.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* LANDING */
+.hero{position:relative;min-height:88vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:4rem 2rem;overflow:hidden}
+.hero-bg{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.grid-lines{position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:60px 60px;opacity:.4}
+.orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:.15}
+.orb1{width:500px;height:500px;background:var(--blue);top:-100px;left:-150px}
+.orb2{width:400px;height:400px;background:var(--green);bottom:-80px;right:-100px}
+.chart-bg{position:absolute;bottom:0;left:0;right:0;height:200px;opacity:.12}
+.badge{display:inline-flex;align-items:center;gap:6px;background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.3);color:var(--blue);padding:6px 14px;border-radius:99px;font-size:13px;margin-bottom:1.5rem}
+.badge-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+h1{font-size:clamp(2.2rem,5vw,4rem);font-weight:600;line-height:1.15;margin-bottom:1rem;letter-spacing:-0.02em}
+.grad{background:linear-gradient(135deg,var(--blue),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.subtitle{font-size:clamp(1rem,2vw,1.2rem);color:var(--muted);max-width:560px;line-height:1.7;margin-bottom:2.5rem}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.btn-primary{background:var(--blue);color:#fff;border:none;padding:12px 28px;border-radius:10px;cursor:pointer;font-family:var(--font);font-size:15px;font-weight:500;transition:all .2s}
+.btn-primary:hover{background:#2563eb;transform:translateY(-2px);box-shadow:0 8px 24px rgba(59,130,246,.3)}
+.btn-outline{background:transparent;color:var(--text);border:1px solid var(--border);padding:12px 28px;border-radius:10px;cursor:pointer;font-family:var(--font);font-size:15px;transition:all .2s}
+.btn-outline:hover{border-color:var(--blue);color:var(--blue)}
+
+/* STATS ROW */
+.stats{display:flex;justify-content:center;gap:3rem;padding:2rem;flex-wrap:wrap;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--bg2)}
+.stat{text-align:center}
+.stat-val{font-size:1.8rem;font-weight:600;background:linear-gradient(135deg,var(--blue),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-label{font-size:12px;color:var(--muted);margin-top:2px}
+
+/* SECTIONS */
+section{padding:5rem 2rem;max-width:1100px;margin:0 auto}
+.section-tag{font-size:12px;font-weight:500;color:var(--blue);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.75rem}
+.section-title{font-size:clamp(1.6rem,3vw,2.2rem);font-weight:600;margin-bottom:1rem;letter-spacing:-0.01em}
+.section-sub{color:var(--muted);max-width:480px;line-height:1.7;margin-bottom:3rem}
+
+/* FEATURES */
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.feat-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.75rem;transition:all .3s;cursor:default;position:relative;overflow:hidden}
+.feat-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(59,130,246,.05),transparent);opacity:0;transition:.3s}
+.feat-card:hover{border-color:var(--blue);transform:translateY(-4px);box-shadow:0 16px 40px rgba(59,130,246,.1)}
+.feat-card:hover::before{opacity:1}
+.feat-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:1rem;font-size:20px}
+.icon-blue{background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.2)}
+.icon-green{background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.2)}
+.feat-title{font-size:15px;font-weight:600;margin-bottom:.5rem}
+.feat-desc{font-size:13px;color:var(--muted);line-height:1.7}
+
+/* HOW IT WORKS */
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0;position:relative}
+.step{text-align:center;padding:2rem 1.5rem;position:relative}
+.step-num{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--green));display:flex;align-items:center;justify-content:center;font-weight:600;font-size:16px;margin:0 auto 1rem;box-shadow:0 0 20px rgba(59,130,246,.3)}
+.step-connector{position:absolute;top:2rem+24px;left:calc(50% + 24px);right:calc(-50% + 24px);height:1px;background:linear-gradient(90deg,var(--blue),var(--green));opacity:.3}
+.step-title{font-size:15px;font-weight:600;margin-bottom:.5rem}
+.step-desc{font-size:13px;color:var(--muted);line-height:1.6}
+
+/* CTA BANNER */
+.cta-banner{background:linear-gradient(135deg,rgba(59,130,246,.1),rgba(16,185,129,.1));border:1px solid rgba(59,130,246,.2);border-radius:20px;padding:3.5rem;text-align:center;margin:0 2rem 4rem}
+.cta-banner h2{font-size:2rem;font-weight:600;margin-bottom:.75rem}
+.cta-banner p{color:var(--muted);margin-bottom:2rem}
+
+/* DEMO PAGE */
+.demo-page{min-height:calc(100vh - 60px);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:4rem 2rem}
+.demo-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:2.5rem;width:100%;max-width:560px}
+.demo-card h2{font-size:1.5rem;font-weight:600;margin-bottom:.5rem}
+.demo-card p{color:var(--muted);font-size:14px;margin-bottom:2rem}
+.input-group{display:flex;gap:10px;margin-bottom:1.5rem;flex-wrap:wrap}
+.demo-input{flex:1;min-width:180px;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:12px 16px;border-radius:10px;font-family:var(--font);font-size:14px;outline:none;transition:.2s}
+.demo-input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(59,130,246,.1)}
+.run-btn{background:linear-gradient(135deg,var(--blue),#2563eb);color:#fff;border:none;padding:12px 24px;border-radius:10px;cursor:pointer;font-family:var(--font);font-size:14px;font-weight:500;white-space:nowrap;transition:all .2s}
+.run-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(59,130,246,.35)}
+.run-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.results{display:none;gap:12px;flex-direction:column}
+.results.show{display:flex;animation:fadeIn .5s ease}
+.result-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1.25rem 1.5rem;display:flex;justify-content:space-between;align-items:center;animation:slideUp .4s ease backwards}
+@keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.result-card:nth-child(2){animation-delay:.1s}
+.result-card:nth-child(3){animation-delay:.2s}
+.result-label{font-size:13px;color:var(--muted)}
+.result-val{font-size:18px;font-weight:600}
+.val-blue{color:var(--blue)}
+.val-green{color:var(--green)}
+.val-amber{color:#f59e0b}
+.spinner{display:none;width:20px;height:20px;border:2px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite;margin:1rem auto}
+.spinner.show{display:block}
+@keyframes spin{to{transform:rotate(360deg)}}
+.asset-chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1.5rem}
+.chip{background:var(--bg3);border:1px solid var(--border);color:var(--muted);padding:4px 12px;border-radius:99px;font-size:12px;cursor:pointer;transition:.2s}
+.chip:hover{border-color:var(--blue);color:var(--blue)}
+
+/* DOCS PAGE */
+.docs-layout{display:grid;grid-template-columns:220px 1fr;gap:2rem;max-width:1000px;margin:0 auto;padding:3rem 2rem;min-height:calc(100vh - 60px)}
+.docs-sidebar{position:sticky;top:80px;height:fit-content}
+.docs-nav-title{font-size:11px;font-weight:500;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.75rem;margin-top:1.5rem}
+.docs-nav-title:first-child{margin-top:0}
+.docs-nav-link{display:block;padding:6px 10px;border-radius:6px;font-size:13px;color:var(--muted);cursor:pointer;transition:.15s;border:none;background:none;width:100%;text-align:left;font-family:var(--font)}
+.docs-nav-link:hover,.docs-nav-link.active-link{background:rgba(59,130,246,.08);color:var(--blue)}
+.docs-content h1{font-size:1.8rem;font-weight:600;margin-bottom:.5rem}
+.docs-content .lead{color:var(--muted);font-size:15px;line-height:1.7;margin-bottom:3rem;border-bottom:1px solid var(--border);padding-bottom:2rem}
+.endpoint-block{margin-bottom:3rem}
+.endpoint-title{font-size:1rem;font-weight:600;margin-bottom:.5rem;display:flex;align-items:center;gap:10px}
+.method-badge{background:rgba(16,185,129,.12);color:var(--green);padding:3px 10px;border-radius:6px;font-size:12px;font-family:var(--mono);border:1px solid rgba(16,185,129,.2)}
+.endpoint-desc{color:var(--muted);font-size:14px;line-height:1.6;margin-bottom:1rem}
+.code-block{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:1rem}
+.code-header{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;background:var(--bg3);border-bottom:1px solid var(--border)}
+.code-lang{font-size:12px;color:var(--muted);font-family:var(--mono)}
+.copy-btn{background:none;border:1px solid var(--border);color:var(--muted);padding:4px 10px;border-radius:6px;font-size:12px;cursor:pointer;font-family:var(--font);transition:.2s}
+.copy-btn:hover{border-color:var(--blue);color:var(--blue)}
+.copy-btn.copied{color:var(--green);border-color:var(--green)}
+pre{padding:1.25rem 1.5rem;font-family:var(--mono);font-size:13px;line-height:1.8;overflow-x:auto;color:#94a3b8}
+.kw{color:#7dd3fc}.str{color:#86efac}.num{color:#fbbf24}.key{color:#c4b5fd}
+.params-table{width:100%;border-collapse:collapse;margin-bottom:1rem;font-size:13px}
+.params-table th{text-align:left;padding:8px 12px;background:var(--bg3);color:var(--muted);font-weight:500;border-bottom:1px solid var(--border)}
+.params-table td{padding:10px 12px;border-bottom:1px solid rgba(30,42,58,.5);color:var(--text)}
+.params-table tr:last-child td{border-bottom:none}
+.tag-required{background:rgba(239,68,68,.1);color:#f87171;padding:2px 8px;border-radius:4px;font-size:11px}
+.tag-string{background:rgba(16,185,129,.1);color:var(--green);padding:2px 8px;border-radius:4px;font-size:11px;font-family:var(--mono)}
+
+/* FOOTER */
+footer{background:var(--bg2);border-top:1px solid var(--border);padding:3rem 2rem;margin-top:2rem}
+.footer-inner{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1.5rem}
+.footer-logo{font-size:16px;font-weight:600}
+.footer-links{display:flex;gap:1.5rem;flex-wrap:wrap}
+.footer-links a{color:var(--muted);font-size:13px;cursor:pointer;transition:.15s}
+.footer-links a:hover{color:var(--text)}
+.footer-copy{color:var(--muted);font-size:12px;width:100%;text-align:center;margin-top:1rem;padding-top:1.5rem;border-top:1px solid var(--border)}
+@media(max-width:700px){
+  .docs-layout{grid-template-columns:1fr}
+  .docs-sidebar{display:none}
+  .stats{gap:1.5rem}
+  nav{padding:0 1rem}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo" onclick="showPage('landing')">
+    <div class="logo-icon">
+      <svg viewBox="0 0 28 28" fill="none">
+        <polyline points="2,22 8,12 13,17 18,8 24,14" stroke="#3B82F6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="24" cy="14" r="2.5" fill="#10B981"/>
+      </svg>
+    </div>
+    QuantAPI
+  </div>
+  <div class="nav-links">
+    <button class="nav-btn active" onclick="showPage('landing');setActive(this)">Home</button>
+    <button class="nav-btn" onclick="showPage('demo');setActive(this)">Demo</button>
+    <button class="nav-btn" onclick="showPage('docs');setActive(this)">API Docs</button>
+  </div>
+  <button class="nav-cta" onclick="showPage('demo');setActive(document.querySelectorAll('.nav-btn')[1])">Try Demo</button>
+</nav>
+
+<!-- LANDING -->
+<div class="page active" id="page-landing">
+  <div class="hero">
+    <div class="hero-bg">
+      <div class="grid-lines"></div>
+      <div class="orb orb1"></div>
+      <div class="orb orb2"></div>
+      <svg class="chart-bg" viewBox="0 0 1200 200" preserveAspectRatio="none">
+        <polyline points="0,180 80,140 160,160 240,100 320,120 400,60 480,90 560,40 640,80 720,30 800,60 880,20 960,50 1040,30 1120,45 1200,20" fill="none" stroke="url(#g1)" stroke-width="1.5"/>
+        <defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#3B82F6"/><stop offset="100%" stop-color="#10B981"/></linearGradient></defs>
+      </svg>
+    </div>
+    <div class="badge"><span class="badge-dot"></span>Now in public beta</div>
+    <h1>Financial Intelligence<br><span class="grad">Infrastructure</span></h1>
+    <p class="subtitle">Scalable ML-powered APIs for forecasting, risk analytics, and market insights — built for developers and quants.</p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="showPage('demo');setActive(document.querySelectorAll('.nav-btn')[1])">Try Demo</button>
+      <button class="btn-outline" onclick="showPage('docs');setActive(document.querySelectorAll('.nav-btn')[2])">View API Docs</button>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-val">3</div><div class="stat-label">API Endpoints</div></div>
+    <div class="stat"><div class="stat-val">99.9%</div><div class="stat-label">Uptime SLA</div></div>
+    <div class="stat"><div class="stat-val">&lt;100ms</div><div class="stat-label">Avg Latency</div></div>
+    <div class="stat"><div class="stat-val">50+</div><div class="stat-label">Assets Supported</div></div>
+  </div>
+
+  <section>
+    <div class="section-tag">Capabilities</div>
+    <div class="section-title">Everything you need to build<br>intelligent financial apps</div>
+    <p class="section-sub">Plug our APIs directly into your platform and start delivering ML-powered insights in minutes.</p>
+    <div class="features-grid">
+      <div class="feat-card">
+        <div class="feat-icon icon-blue">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <div class="feat-title">Trend Forecasting</div>
+        <div class="feat-desc">Short-term market direction analysis powered by ML models trained on multi-asset time series data.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon icon-green">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        </div>
+        <div class="feat-title">Volatility Estimation</div>
+        <div class="feat-desc">Real-time volatility scoring for individual assets and portfolios using GARCH-inspired models.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon icon-blue">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="feat-title">Risk Analytics</div>
+        <div class="feat-desc">Quantitative risk scoring and max drawdown estimation with configurable confidence intervals.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon icon-green">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <div class="feat-title">Anomaly Detection</div>
+        <div class="feat-desc">Identify unusual market behavior, structural breaks, and regime changes using statistical scoring.</div>
+      </div>
+    </div>
+  </section>
+
+  <section style="background:var(--bg2);max-width:100%;padding:5rem 2rem">
+    <div style="max-width:1100px;margin:0 auto">
+      <div class="section-tag">How it works</div>
+      <div class="section-title">Three steps to market insights</div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-title">Input asset or data</div>
+          <div class="step-desc">Pass any ticker symbol — equities, crypto, indices, or FX pairs — via query param.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-title">API runs ML models</div>
+          <div class="step-desc">Our inference layer processes the request through trained forecasting and risk models in milliseconds.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-title">Get structured insights</div>
+          <div class="step-desc">Receive clean JSON responses with trend direction, confidence scores, volatility, and risk metrics.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div style="max-width:1100px;margin:0 auto;padding:3rem 2rem 0">
+    <div class="cta-banner">
+      <h2>Start building with <span class="grad">QuantAPI</span></h2>
+      <p>Join developers and quants using our APIs to power their next generation of financial tools.</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+        <button class="btn-primary" onclick="showPage('docs');setActive(document.querySelectorAll('.nav-btn')[2])">View API Docs</button>
+        <button class="btn-outline" onclick="showPage('demo');setActive(document.querySelectorAll('.nav-btn')[1])">Live Demo</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-logo">QuantAPI</div>
+      <div class="footer-links">
+        <a onclick="showPage('docs');setActive(document.querySelectorAll('.nav-btn')[2])">Documentation</a>
+        <a onclick="showPage('demo');setActive(document.querySelectorAll('.nav-btn')[1])">Demo</a>
+        <a>Pricing</a>
+        <a>Status</a>
+        <a>GitHub</a>
+      </div>
+    </div>
+    <div class="footer-copy">© 2025 QuantAPI Inc. — Financial Intelligence Infrastructure</div>
+  </footer>
+</div>
+
+<!-- DEMO -->
+<div class="page" id="page-demo">
+  <div class="demo-page">
+    <div style="text-align:center;margin-bottom:2rem;max-width:500px">
+      <div class="section-tag" style="text-align:center">Interactive Demo</div>
+      <h1 style="font-size:1.8rem;font-weight:600;margin-bottom:.5rem">Run live analysis</h1>
+      <p style="color:var(--muted);font-size:14px">Enter any asset symbol and get instant ML-powered insights from our API.</p>
+    </div>
+    <div class="demo-card">
+      <h2>Asset Analysis</h2>
+      <p>Type a ticker or pick one below</p>
+      <div class="asset-chips">
+        <span class="chip" onclick="setAsset('AAPL')">AAPL</span>
+        <span class="chip" onclick="setAsset('BTC')">BTC</span>
+        <span class="chip" onclick="setAsset('NIFTY')">NIFTY</span>
+        <span class="chip" onclick="setAsset('ETH')">ETH</span>
+        <span class="chip" onclick="setAsset('TSLA')">TSLA</span>
+        <span class="chip" onclick="setAsset('GOLD')">GOLD</span>
+      </div>
+      <div class="input-group">
+        <input class="demo-input" id="assetInput" type="text" placeholder="e.g. AAPL, BTC, NIFTY…" />
+        <button class="run-btn" id="runBtn" onclick="runAnalysis()">Run Analysis</button>
+      </div>
+      <div class="spinner" id="spinner"></div>
+      <div class="results" id="results">
+        <div class="result-card">
+          <div>
+            <div class="result-label">Trend Direction</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px">Model forecast</div>
+          </div>
+          <div class="result-val val-blue" id="res-trend">—</div>
+        </div>
+        <div class="result-card">
+          <div>
+            <div class="result-label">Confidence</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px">Model certainty</div>
+          </div>
+          <div class="result-val val-green" id="res-conf">—</div>
+        </div>
+        <div class="result-card">
+          <div>
+            <div class="result-label">Volatility Score</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px">30-day estimate</div>
+          </div>
+          <div class="result-val val-amber" id="res-vol">—</div>
+        </div>
+        <div class="result-card">
+          <div>
+            <div class="result-label">Risk Level</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px">Risk scoring</div>
+          </div>
+          <div class="result-val" id="res-risk" style="color:var(--muted)">—</div>
+        </div>
+        <div class="result-card">
+          <div>
+            <div class="result-label">Anomaly Detected</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px">Structural break signal</div>
+          </div>
+          <div class="result-val" id="res-anomaly" style="color:var(--muted)">—</div>
+        </div>
+      </div>
+    </div>
+    <p style="color:var(--muted);font-size:12px;margin-top:1.5rem;text-align:center">Demo uses mock ML logic. Connect your own backend for live data.</p>
+  </div>
+</div>
+
+<!-- DOCS -->
+<div class="page" id="page-docs">
+  <div class="docs-layout">
+    <div class="docs-sidebar">
+      <div class="docs-nav-title">Overview</div>
+      <button class="docs-nav-link active-link">Introduction</button>
+      <button class="docs-nav-link">Authentication</button>
+      <button class="docs-nav-link">Rate Limits</button>
+      <div class="docs-nav-title">Endpoints</div>
+      <button class="docs-nav-link">/forecast</button>
+      <button class="docs-nav-link">/risk-score</button>
+      <button class="docs-nav-link">/anomaly</button>
+      <div class="docs-nav-title">SDKs</div>
+      <button class="docs-nav-link">Python</button>
+      <button class="docs-nav-link">JavaScript</button>
+    </div>
+    <div class="docs-content">
+      <h1>API Reference</h1>
+      <p class="lead">The QuantAPI REST API provides ML-powered financial analytics via simple HTTP requests. All responses are JSON. Base URL: <code style="font-family:var(--mono);background:var(--bg3);padding:2px 8px;border-radius:4px;color:var(--blue)">https://api.quantapi.io/v1</code></p>
+
+      <div class="endpoint-block">
+        <div class="endpoint-title">
+          <span class="method-badge">GET</span>
+          /forecast
+        </div>
+        <p class="endpoint-desc">Returns trend direction, confidence score, and volatility estimate for a given asset symbol using our short-term forecasting model.</p>
+        <table class="params-table">
+          <thead><tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code style="font-family:var(--mono)">asset</code></td><td><span class="tag-string">string</span></td><td><span class="tag-required">required</span></td><td style="color:var(--muted)">Asset ticker symbol (e.g. AAPL, BTC)</td></tr>
+          </tbody>
+        </table>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Request</span><button class="copy-btn" onclick="copyCode(this,'GET https://api.quantapi.io/v1/forecast?asset=AAPL')">Copy</button></div>
+          <pre><span class="kw">GET</span> https://api.quantapi.io/v1/forecast?<span class="key">asset</span>=<span class="str">AAPL</span></pre>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Response · 200 OK</span><button class="copy-btn" onclick='copyCode(this,`{"trend":"uptrend","confidence":0.64,"volatility":0.21}`)'>Copy</button></div>
+          <pre>{
+  <span class="key">"trend"</span>: <span class="str">"uptrend"</span>,
+  <span class="key">"confidence"</span>: <span class="num">0.64</span>,
+  <span class="key">"volatility"</span>: <span class="num">0.21</span>
+}</pre>
+        </div>
+      </div>
+
+      <div class="endpoint-block">
+        <div class="endpoint-title">
+          <span class="method-badge">GET</span>
+          /risk-score
+        </div>
+        <p class="endpoint-desc">Returns a qualitative risk label and numerical risk score for the specified asset based on drawdown and volatility metrics.</p>
+        <table class="params-table">
+          <thead><tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code style="font-family:var(--mono)">asset</code></td><td><span class="tag-string">string</span></td><td><span class="tag-required">required</span></td><td style="color:var(--muted)">Asset ticker symbol</td></tr>
+          </tbody>
+        </table>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Request</span><button class="copy-btn" onclick="copyCode(this,'GET https://api.quantapi.io/v1/risk-score?asset=AAPL')">Copy</button></div>
+          <pre><span class="kw">GET</span> https://api.quantapi.io/v1/risk-score?<span class="key">asset</span>=<span class="str">AAPL</span></pre>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Response · 200 OK</span><button class="copy-btn" onclick='copyCode(this,`{"risk":"medium","score":0.55}`)'>Copy</button></div>
+          <pre>{
+  <span class="key">"risk"</span>: <span class="str">"medium"</span>,
+  <span class="key">"score"</span>: <span class="num">0.55</span>
+}</pre>
+        </div>
+      </div>
+
+      <div class="endpoint-block">
+        <div class="endpoint-title">
+          <span class="method-badge">GET</span>
+          /anomaly
+        </div>
+        <p class="endpoint-desc">Detects structural breaks and unusual market behavior using statistical anomaly scoring. Returns a boolean flag and a continuous score.</p>
+        <table class="params-table">
+          <thead><tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code style="font-family:var(--mono)">asset</code></td><td><span class="tag-string">string</span></td><td><span class="tag-required">required</span></td><td style="color:var(--muted)">Asset ticker symbol</td></tr>
+          </tbody>
+        </table>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Request</span><button class="copy-btn" onclick="copyCode(this,'GET https://api.quantapi.io/v1/anomaly?asset=AAPL')">Copy</button></div>
+          <pre><span class="kw">GET</span> https://api.quantapi.io/v1/anomaly?<span class="key">asset</span>=<span class="str">AAPL</span></pre>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Response · 200 OK</span><button class="copy-btn" onclick='copyCode(this,`{"anomaly":false,"score":0.12}`)'>Copy</button></div>
+          <pre>{
+  <span class="key">"anomaly"</span>: <span class="kw">false</span>,
+  <span class="key">"score"</span>: <span class="num">0.12</span>
+}</pre>
+        </div>
+      </div>
+
+      <div class="endpoint-block" style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.5rem">
+        <div class="endpoint-title" style="margin-bottom:.75rem">Python SDK example</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn" onclick="copyCode(this,`import requests\n\nres = requests.get('https://api.quantapi.io/v1/forecast', params={'asset': 'AAPL'})\ndata = res.json()\nprint(data['trend'], data['confidence'])`)">Copy</button></div>
+          <pre><span class="kw">import</span> requests
+
+res = requests.<span class="key">get</span>(<span class="str">'https://api.quantapi.io/v1/forecast'</span>,
+  params={<span class="str">'asset'</span>: <span class="str">'AAPL'</span>})
+data = res.<span class="key">json</span>()
+<span class="kw">print</span>(data[<span class="str">'trend'</span>], data[<span class="str">'confidence'</span>])</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function showPage(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  window.scrollTo(0,0);
+}
+function setActive(el){
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+}
+function setAsset(sym){
+  document.getElementById('assetInput').value=sym;
+}
+function rand(min,max){return Math.random()*(max-min)+min;}
+function runAnalysis(){
+  const asset=document.getElementById('assetInput').value.trim();
+  if(!asset){document.getElementById('assetInput').focus();return;}
+  const btn=document.getElementById('runBtn');
+  const spinner=document.getElementById('spinner');
+  const results=document.getElementById('results');
+  btn.disabled=true;results.classList.remove('show');spinner.classList.add('show');
+  setTimeout(()=>{
+    spinner.classList.remove('show');
+    const trend=Math.random()>.45?'Uptrend':'Downtrend';
+    const conf=(rand(50,90)).toFixed(1)+'%';
+    const vol=(rand(0.1,0.5)).toFixed(2);
+    const risks=['Low','Medium','High'];const risk=risks[Math.floor(Math.random()*3)];
+    const anomaly=Math.random()<0.15;
+    document.getElementById('res-trend').textContent=trend;
+    document.getElementById('res-trend').style.color=trend==='Uptrend'?'var(--green)':'#f87171';
+    document.getElementById('res-conf').textContent=conf;
+    document.getElementById('res-vol').textContent=vol;
+    const riskEl=document.getElementById('res-risk');
+    riskEl.textContent=risk;
+    riskEl.style.color=risk==='Low'?'var(--green)':risk==='Medium'?'#f59e0b':'#f87171';
+    const anomEl=document.getElementById('res-anomaly');
+    anomEl.textContent=anomaly?'Yes — Detected':'No';
+    anomEl.style.color=anomaly?'#f87171':'var(--green)';
+    results.classList.add('show');btn.disabled=false;
+  },900);
+}
+function copyCode(btn,text){
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.textContent='Copied!';btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('copied');},2000);
+  });
+}
+document.getElementById('assetInput').addEventListener('keydown',e=>{if(e.key==='Enter')runAnalysis();});
+</script>
+</body>
+</html>
