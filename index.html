@@ -497,7 +497,7 @@ function runAnalysis(){
   fetch("https://uvy6bqlgljyyirohkco2qmhiuy0jgaka.lambda-url.us-east-1.on.aws/")
   .then(res => res.json())
   .then(data => {
-      spinner.classList.remove('show');
+    spinner.classList.remove('show');
 
     document.getElementById('res-trend').textContent = data.trend;
     document.getElementById('res-conf').textContent = (data.confidence * 100).toFixed(1) + "%";
